@@ -1,13 +1,30 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { FaHome, FaUserMd, FaUsers, FaBoxes } from "react-icons/fa"; // Importing icons
+import { FaHome, FaUserMd, FaUsers, FaBoxes } from "react-icons/fa";
+
+const navigationItems = [
+  { path: "/", label: "Home", icon: <FaHome /> },
+  { path: "/doctor", label: "Doctors", icon: <FaUserMd /> },
+  { path: "/nurse", label: "Nurses", icon: <FaUsers /> },
+  { path: "/inventory", label: "Inventory", icon: <FaBoxes /> },
+];
+
+const NavItem = ({ path, label, icon, isExpanded }) => (
+  <li className="mb-4">
+    <Link
+      to={path}
+      className="flex items-center block px-4 py-3 text-lg transition-all rounded hover:bg-green-700"
+    >
+      <span className="mr-4 text-2xl">{icon}</span>
+      {isExpanded && label}
+    </Link>
+  </li>
+);
 
 const NavigationDrawer = () => {
-  const [isExpanded, setIsExpanded] = useState(true); // State for toggling the drawer
+  const [isExpanded, setIsExpanded] = useState(true);
 
-  const toggleDrawer = () => {
-    setIsExpanded(!isExpanded); // Toggle drawer visibility
-  };
+  const toggleDrawer = () => setIsExpanded(!isExpanded);
 
   return (
     <div className="lg:flex">
@@ -17,82 +34,37 @@ const NavigationDrawer = () => {
           isExpanded ? "64" : "16"
         } bg-green-950 text-white min-h-screen p-6 transition-all duration-300 lg:block hidden`}
       >
-        <button onClick={toggleDrawer} className="text-white mb-8 text-2xl">
-          {isExpanded ? "<" : ">"} {/* Arrow symbol to show expand/collapse */}
+        <button onClick={toggleDrawer} className="mb-8 text-2xl text-white">
+          {isExpanded ? "<" : ">"}
         </button>
-        <h2 className={`text-3xl font-bold mb-8 ${isExpanded ? "" : "hidden"}`}>
-          Hospital Dashboard
-        </h2>
+        {isExpanded && (
+          <h2 className="mb-8 text-3xl font-bold">Hospital Dashboard</h2>
+        )}
         <ul>
-          <li className="mb-4">
-            <Link
-              to="/"
-              className="block py-3 flex items-center text-lg hover:bg-green-700 px-4 rounded transition-all"
-            >
-              <FaHome className="mr-4 text-2xl" /> {/* Home icon */}
-              {isExpanded && "Home"}
-            </Link>
-          </li>
-          <li className="mb-4">
-            <Link
-              to="/doctor"
-              className="block py-3 flex items-center text-lg hover:bg-green-700 px-4 rounded transition-all"
-            >
-              <FaUserMd className="mr-4 text-2xl" /> {/* Doctor icon */}
-              {isExpanded && "Doctors"}
-            </Link>
-          </li>
-          <li className="mb-4">
-            <Link
-              to="/nurse"
-              className="block py-3 flex items-center text-lg hover:bg-green-700 px-4 rounded transition-all"
-            >
-              <FaUsers className="mr-4 text-2xl" /> {/* Nurse icon */}
-              {isExpanded && "Nurses"}
-            </Link>
-          </li>
-          <li className="mb-4">
-            <Link
-              to="/inventory"
-              className="block py-3 flex items-center text-lg hover:bg-green-700 px-4 rounded transition-all"
-            >
-              <FaBoxes className="mr-4 text-2xl" /> {/* Inventory icon */}
-              {isExpanded && "Inventory"}
-            </Link>
-          </li>
+          {navigationItems.map((item) => (
+            <NavItem
+              key={item.path}
+              path={item.path}
+              label={item.label}
+              icon={item.icon}
+              isExpanded={isExpanded}
+            />
+          ))}
         </ul>
       </div>
 
       {/* Mobile Bottom Navigation */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-green-950 text-white p-4 flex justify-around items-center">
-        <Link
-          to="/"
-          className="flex flex-col items-center text-lg hover:bg-green-700 p-2 rounded transition-all"
-        >
-          <FaHome className="text-2xl" /> {/* Home icon */}
-          {isExpanded && "Home"}
-        </Link>
-        <Link
-          to="/doctor"
-          className="flex flex-col items-center text-lg hover:bg-green-700 p-2 rounded transition-all"
-        >
-          <FaUserMd className="text-2xl" /> {/* Doctor icon */}
-          {isExpanded && "Doctors"}
-        </Link>
-        <Link
-          to="/nurse"
-          className="flex flex-col items-center text-lg hover:bg-green-700 p-2 rounded transition-all"
-        >
-          <FaUsers className="text-2xl" /> {/* Nurse icon */}
-          {isExpanded && "Nurses"}
-        </Link>
-        <Link
-          to="/inventory"
-          className="flex flex-col items-center text-lg hover:bg-green-700 p-2 rounded transition-all"
-        >
-          <FaBoxes className="text-2xl" /> {/* Inventory icon */}
-          {isExpanded && "Inventory"}
-        </Link>
+      <div className="fixed bottom-0 left-0 right-0 flex items-center justify-around p-4 text-white lg:hidden bg-green-950">
+        {navigationItems.map((item) => (
+          <Link
+            key={item.path}
+            to={item.path}
+            className="flex flex-col items-center p-2 text-lg transition-all rounded hover:bg-green-700"
+          >
+            <span className="text-2xl">{item.icon}</span>
+            <span className="text-sm">{item.label}</span>
+          </Link>
+        ))}
       </div>
     </div>
   );
