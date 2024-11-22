@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import jsPDF from "jspdf";
 import { FaDownload } from "react-icons/fa";
+import { Line } from "react-chartjs-2";
+import Chart from "chart.js/auto";
 import BackButton from "../components/BackButton";
 
 const Reports = () => {
@@ -20,6 +22,34 @@ const Reports = () => {
       age: 42,
       diagnosis: "COVID-19",
       date: "2024-11-17",
+    },
+    {
+      id: 4,
+      name: "Emily Clark",
+      age: 55,
+      diagnosis: "Diabetes",
+      date: "2024-11-18",
+    },
+    {
+      id: 5,
+      name: "Sarah Lee",
+      age: 60,
+      diagnosis: "Hypertension",
+      date: "2024-11-19",
+    },
+    {
+      id: 6,
+      name: "David Wilson",
+      age: 48,
+      diagnosis: "Asthma",
+      date: "2024-11-20",
+    },
+    {
+      id: 7,
+      name: "Rachel Adams",
+      age: 33,
+      diagnosis: "Flu",
+      date: "2024-11-21",
     },
   ]);
 
@@ -53,6 +83,32 @@ const Reports = () => {
     doc.save("Report.pdf");
   };
 
+  // Data for chart (e.g., patients per diagnosis)
+  const diagnosisData = reportData.reduce((acc, report) => {
+    acc[report.diagnosis] = (acc[report.diagnosis] || 0) + 1;
+    return acc;
+  }, {});
+
+  const chartData = {
+    labels: Object.keys(diagnosisData),
+    datasets: [
+      {
+        label: "Number of Patients",
+        data: Object.values(diagnosisData),
+        fill: false,
+        backgroundColor: "rgba(75,192,192,0.2)",
+        borderColor: "rgba(75,192,192,1)",
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  // Summary statistics
+  const totalReports = filteredReports.length;
+  const avgAge =
+    filteredReports.reduce((sum, report) => sum + report.age, 0) /
+    (totalReports || 1);
+
   return (
     <div className="p-4 sm:p-6">
       <BackButton />
@@ -84,6 +140,19 @@ const Reports = () => {
             />
           </div>
         </div>
+      </div>
+
+      {/* Summary Section */}
+      <div className="mb-6">
+        <h2 className="text-xl font-semibold">Report Summary</h2>
+        <p>Total Reports: {totalReports}</p>
+        <p>Average Age: {avgAge.toFixed(2)}</p>
+      </div>
+
+      {/* Chart Section */}
+      <div className="mb-6">
+        <h2 className="text-xl font-semibold">Diagnosis Distribution</h2>
+        <Line data={chartData} />
       </div>
 
       {/* Reports Table */}
