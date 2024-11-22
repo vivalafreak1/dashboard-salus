@@ -6,8 +6,9 @@ import Loading from "./components/Loading"; // Import the Loading component
 // Lazy load pages
 const Home = lazy(() => import("./pages/Home"));
 const Doctor = lazy(() => import("./pages/Doctor"));
-const CreateDoctor = lazy(() => import("./pages/CreateDoctor")); // Import the new CreateDoctor page
+const CreateDoctor = lazy(() => import("./pages/CreateDoctor"));
 const Nurse = lazy(() => import("./pages/Nurse"));
+const CreateNurse = lazy(() => import("./pages/CreateNurse"));
 const Inventory = lazy(() => import("./pages/Inventory"));
 const Emergency = lazy(() => import("./pages/Emergency"));
 
@@ -23,6 +24,7 @@ function App() {
               <Route path="/doctor" element={<Doctor />} />
               <Route path="/doctor/create" element={<CreateDoctor />} />
               <Route path="/nurse" element={<Nurse />} />
+              <Route path="/nurse/create" element={<CreateNurse />} />
               <Route path="/inventory" element={<Inventory />} />
               <Route path="/emergency" element={<Emergency />} />
             </Routes>

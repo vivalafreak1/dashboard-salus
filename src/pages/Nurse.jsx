@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaPlus } from "react-icons/fa";
 import BackButton from "../components/BackButton";
+import { Link } from "react-router-dom";
+
 const Nurse = () => {
   // Example data for nurses
   const nurses = [
@@ -209,6 +211,17 @@ const Nurse = () => {
       <BackButton />
 
       <h1 className="mb-4 text-3xl font-bold">Nurses</h1>
+
+      {/* Add Create Nurse button */}
+      <div className="flex items-center justify-between mb-4">
+        <Link
+          to="/nurse/create"
+          className="flex items-center px-4 py-2 space-x-2 text-white transition bg-blue-600 rounded-md hover:bg-blue-700"
+        >
+          <FaPlus /> {/* Plus icon */}
+          <span>Create New Nurse</span>
+        </Link>
+      </div>
 
       {/* Search Bar and Shift Filter */}
       <div className="flex flex-col gap-4 mb-4 md:flex-row">
