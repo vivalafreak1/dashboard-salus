@@ -1,5 +1,11 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { FaUserMd, FaUsers, FaBoxes, FaAmbulance } from "react-icons/fa";
+import {
+  FaUserMd,
+  FaUsers,
+  FaBoxes,
+  FaAmbulance,
+  FaFileAlt,
+} from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Switch from "react-switch"; // Import react-switch for the toggle
 
@@ -124,6 +130,13 @@ const Home = () => {
             color="bg-red-700"
             icon={FaAmbulance}
             link="/emergency"
+          />
+          <Card
+            title="Reports"
+            value="View system reports"
+            color="bg-teal-700"
+            icon={FaFileAlt}
+            link="/report"
           />
         </div>
       )}

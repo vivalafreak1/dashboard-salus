@@ -6,6 +6,7 @@ import {
   FaUsers,
   FaBoxes,
   FaAmbulance,
+  FaFileAlt,
 } from "react-icons/fa";
 
 const navigationItems = [
@@ -18,6 +19,7 @@ const navigationItems = [
     label: "Emergency",
     icon: <FaAmbulance />,
   },
+  { path: "/report", label: "Reports", icon: <FaFileAlt /> },
 ];
 
 const NavItem = ({ path, label, icon, isExpanded }) => (

@@ -12,6 +12,7 @@ const CreateNurse = lazy(() => import("./pages/CreateNurse"));
 const Inventory = lazy(() => import("./pages/Inventory"));
 const CreateInventory = lazy(() => import("./pages/CreateInventory"));
 const Emergency = lazy(() => import("./pages/Emergency"));
+const Report = lazy(() => import("./pages/Reports"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
               <Route path="/inventory" element={<Inventory />} />
               <Route path="/inventory/create" element={<CreateInventory />} />
               <Route path="/emergency" element={<Emergency />} />
+              <Route path="/report" element={<Report />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Suspense>
