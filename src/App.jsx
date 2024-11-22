@@ -8,6 +8,7 @@ const Home = lazy(() => import("./pages/Home"));
 const Doctor = lazy(() => import("./pages/Doctor"));
 const Nurse = lazy(() => import("./pages/Nurse"));
 const Inventory = lazy(() => import("./pages/Inventory"));
+const Emergency = lazy(() => import("./pages/Emergency"));
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
               <Route path="/doctor" element={<Doctor />} />
               <Route path="/nurse" element={<Nurse />} />
               <Route path="/inventory" element={<Inventory />} />
+              <Route path="/emergency" element={<Emergency />} />
             </Routes>
           </Suspense>
         </div>

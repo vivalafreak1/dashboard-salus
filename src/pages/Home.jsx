@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { FaSearch, FaUserMd, FaUsers, FaBoxes } from "react-icons/fa";
+import { FaUserMd, FaUsers, FaBoxes, FaAmbulance } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Switch from "react-switch"; // Import react-switch for the toggle
 
@@ -116,6 +116,14 @@ const Home = () => {
             color="bg-purple-700"
             icon={FaBoxes}
             link="/inventory"
+          />
+          {/* Emergency Services Card */}
+          <Card
+            title="Emergency Services"
+            value="View emergency services"
+            color="bg-red-700"
+            icon={FaAmbulance}
+            link="/emergency"
           />
         </div>
       )}

@@ -1,12 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { FaHome, FaUserMd, FaUsers, FaBoxes } from "react-icons/fa";
+import {
+  FaHome,
+  FaUserMd,
+  FaUsers,
+  FaBoxes,
+  FaAmbulance,
+} from "react-icons/fa";
 
 const navigationItems = [
   { path: "/", label: "Home", icon: <FaHome /> },
   { path: "/doctor", label: "Doctors", icon: <FaUserMd /> },
   { path: "/nurse", label: "Nurses", icon: <FaUsers /> },
   { path: "/inventory", label: "Inventory", icon: <FaBoxes /> },
+  {
+    path: "/emergency",
+    label: "Emergency",
+    icon: <FaAmbulance />,
+  },
 ];
 
 const NavItem = ({ path, label, icon, isExpanded }) => (
