@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { FaSearch } from "react-icons/fa"; // Import the search icon
+import { FaSearch, FaPlus } from "react-icons/fa"; // Import the search icon
 import BackButton from "../components/BackButton";
+import { Link } from "react-router-dom";
 
 const Inventory = () => {
   const medicines = [
@@ -207,6 +208,17 @@ const Inventory = () => {
       {/* Back Button */}
       <BackButton />
       <h1 className="mb-4 text-3xl font-bold">Inventory</h1>
+
+      {/* Add Create Medicine button */}
+      <div className="flex items-center justify-between mb-4">
+        <Link
+          to="/inventory/create"
+          className="flex items-center px-4 py-2 space-x-2 text-white transition bg-blue-600 rounded-md hover:bg-blue-700"
+        >
+          <FaPlus />
+          <span>Create New Medicine</span>
+        </Link>
+      </div>
 
       {/* Search Bar */}
       <div className="flex items-center p-2 mb-4 border border-gray-300 rounded-md">

@@ -1,4 +1,3 @@
-// CreateNurse.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackButton from "../components/BackButton"; // Assuming you have a BackButton component
