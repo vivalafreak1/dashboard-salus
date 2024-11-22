@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FaHome, FaUserMd, FaUsers, FaBoxes } from "react-icons/fa";
 
@@ -23,12 +23,24 @@ const NavItem = ({ path, label, icon, isExpanded }) => (
 
 const NavigationDrawer = () => {
   const [isExpanded, setIsExpanded] = useState(true);
+  const [isCompactMode, setIsCompactMode] = useState(false);
+
+  useEffect(() => {
+    // Check localStorage for compact mode state
+    const savedMode = JSON.parse(localStorage.getItem("compactMode"));
+    if (savedMode !== null) {
+      setIsCompactMode(savedMode);
+    }
+  }, []);
 
   const toggleDrawer = () => setIsExpanded(!isExpanded);
 
+  if (isCompactMode) {
+    return null; // Hide navigation drawer if compact mode is enabled
+  }
+
   return (
     <div className="lg:flex">
-      {/* Desktop Sidebar */}
       <div
         className={`w-${
           isExpanded ? "64" : "16"
@@ -53,7 +65,6 @@ const NavigationDrawer = () => {
         </ul>
       </div>
 
-      {/* Mobile Bottom Navigation */}
       <div className="fixed bottom-0 left-0 right-0 flex items-center justify-around p-4 text-white lg:hidden bg-green-950">
         {navigationItems.map((item) => (
           <Link

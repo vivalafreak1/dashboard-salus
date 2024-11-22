@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa"; // Import the search icon
+import BackButton from "../components/BackButton";
 
 const Inventory = () => {
   const medicines = [
@@ -203,6 +204,8 @@ const Inventory = () => {
 
   return (
     <div className="p-4 mb-16">
+      {/* Back Button */}
+      <BackButton />
       <h1 className="mb-4 text-3xl font-bold">Inventory</h1>
 
       {/* Search Bar */}

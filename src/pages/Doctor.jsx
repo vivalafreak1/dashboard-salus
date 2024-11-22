@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
+import BackButton from "../components/BackButton";
 
 const Doctor = () => {
   const doctors = [
@@ -131,6 +132,8 @@ const Doctor = () => {
 
   return (
     <div className="p-4 mb-16">
+      <BackButton />
+
       <h1 className="mb-4 text-3xl font-bold">Doctors</h1>
 
       {/* Search Bar and Shift Filter */}

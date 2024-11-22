@@ -1,12 +1,7 @@
 import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
-
+import BackButton from "../components/BackButton";
 const Nurse = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedShift, setSelectedShift] = useState("All");
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-
   // Example data for nurses
   const nurses = [
     {
@@ -186,6 +181,11 @@ const Nurse = () => {
     },
   ];
 
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedShift, setSelectedShift] = useState("All");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
   // Filter nurses by search query and selected shift
   const filteredNurses = nurses.filter(
     (nurse) =>
@@ -205,6 +205,9 @@ const Nurse = () => {
 
   return (
     <div className="p-4 mb-16">
+      {/* Back Button */}
+      <BackButton />
+
       <h1 className="mb-4 text-3xl font-bold">Nurses</h1>
 
       {/* Search Bar and Shift Filter */}
