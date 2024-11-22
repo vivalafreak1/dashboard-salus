@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { FaSearch, FaPlus } from "react-icons/fa"; // Importing FaPlus for the button
+import { FaSearch, FaPlus, FaEdit, FaTrashAlt } from "react-icons/fa"; // Importing necessary icons
 import { Link } from "react-router-dom"; // Import Link to handle navigation
 import BackButton from "../components/BackButton";
 
 const Doctor = () => {
-  const doctors = [
+  const initialDoctors = [
     { id: 1, name: "Dr. John Doe", specialty: "Cardiology", shift: "Morning" },
     { id: 2, name: "Dr. Jane Smith", specialty: "Neurology", shift: "Evening" },
     {
@@ -107,6 +107,7 @@ const Doctor = () => {
     },
   ];
 
+  const [doctors, setDoctors] = useState(initialDoctors);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedShift, setSelectedShift] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
@@ -130,6 +131,37 @@ const Doctor = () => {
   const totalPages = Math.ceil(filteredDoctors.length / itemsPerPage);
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+
+  const handleDelete = (id) => {
+    if (window.confirm("Are you sure you want to delete this doctor?")) {
+      setDoctors(doctors.filter((doctor) => doctor.id !== id));
+    }
+  };
+
+  const handleEdit = (id) => {
+    const doctor = doctors.find((doctor) => doctor.id === id);
+    const updatedName = prompt("Edit Doctor's Name:", doctor.name);
+    const updatedSpecialty = prompt(
+      "Edit Doctor's Specialty:",
+      doctor.specialty
+    );
+    const updatedShift = prompt("Edit Doctor's Shift:", doctor.shift);
+
+    if (updatedName && updatedSpecialty && updatedShift) {
+      setDoctors(
+        doctors.map((doctor) =>
+          doctor.id === id
+            ? {
+                ...doctor,
+                name: updatedName,
+                specialty: updatedSpecialty,
+                shift: updatedShift,
+              }
+            : doctor
+        )
+      );
+    }
+  };
 
   return (
     <div className="p-4 mb-16">
@@ -181,6 +213,8 @@ const Doctor = () => {
                 <th className="px-4 py-2 text-left border">Doctor Name</th>
                 <th className="px-4 py-2 text-left border">Specialty</th>
                 <th className="px-4 py-2 text-left border">Shift</th>
+                <th className="px-4 py-2 text-left border">Action</th>{" "}
+                {/* New column */}
               </tr>
             </thead>
             <tbody>
@@ -189,6 +223,22 @@ const Doctor = () => {
                   <td className="px-4 py-2 border">{doctor.name}</td>
                   <td className="px-4 py-2 border">{doctor.specialty}</td>
                   <td className="px-4 py-2 border">{doctor.shift}</td>
+                  <td className="px-4 py-2 border">
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => handleEdit(doctor.id)}
+                        className="text-blue-500 hover:text-blue-700"
+                      >
+                        <FaEdit /> {/* Edit Icon */}
+                      </button>
+                      <button
+                        onClick={() => handleDelete(doctor.id)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <FaTrashAlt /> {/* Delete Icon */}
+                      </button>
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
