@@ -16,3 +16,5 @@ NodeJS
 - Type `npm i` for intalling modules
 - Type `npm run dev` to run project in development mode
 - Type `npm run build` to build the project
+
+test
