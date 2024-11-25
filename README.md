@@ -18,3 +18,7 @@ Currently, two official plugins are available:
 - Type `npm run dev` to run project in development mode
 - Type `npm run build` to build the project
 - Move the `dist` folder to your self hosted server
+
+# Additional
+
+- This included /login route, 
