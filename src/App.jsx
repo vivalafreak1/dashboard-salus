@@ -11,8 +11,11 @@ const Nurse = lazy(() => import("./pages/Nurse"));
 const CreateNurse = lazy(() => import("./pages/CreateNurse"));
 const Inventory = lazy(() => import("./pages/Inventory"));
 const CreateInventory = lazy(() => import("./pages/CreateInventory"));
+const Admission = lazy(() => import("./pages/Admission"));
+const CreateAdmission = lazy(() => import("./pages/CreateAdmission"));
 const Emergency = lazy(() => import("./pages/Emergency"));
 const Report = lazy(() => import("./pages/Reports"));
+const DoctorAppointment = lazy(() => import("./pages/DoctorAppointment"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 function App() {
@@ -28,6 +31,9 @@ function App() {
               <Route path="/doctor/create" element={<CreateDoctor />} />
               <Route path="/nurse" element={<Nurse />} />
               <Route path="/nurse/create" element={<CreateNurse />} />
+              <Route path="/appointment" element={<DoctorAppointment />} />
+              <Route path="/admission" element={<Admission />} />
+              <Route path="/admission/create" element={<CreateAdmission />} />
               <Route path="/inventory" element={<Inventory />} />
               <Route path="/inventory/create" element={<CreateInventory />} />
               <Route path="/emergency" element={<Emergency />} />

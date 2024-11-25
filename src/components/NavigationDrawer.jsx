@@ -7,18 +7,18 @@ import {
   FaBoxes,
   FaAmbulance,
   FaFileAlt,
+  FaCalendarCheck,
+  FaHospitalAlt,
 } from "react-icons/fa";
 
 const navigationItems = [
   { path: "/", label: "Home", icon: <FaHome /> },
   { path: "/doctor", label: "Doctors", icon: <FaUserMd /> },
   { path: "/nurse", label: "Nurses", icon: <FaUsers /> },
+  { path: "/appointment", label: "Appointments", icon: <FaCalendarCheck /> },
   { path: "/inventory", label: "Inventory", icon: <FaBoxes /> },
-  {
-    path: "/emergency",
-    label: "Emergency",
-    icon: <FaAmbulance />,
-  },
+  { path: "/admission", label: "Admissions", icon: <FaHospitalAlt /> },
+  { path: "/emergency", label: "Emergency", icon: <FaAmbulance /> },
   { path: "/report", label: "Reports", icon: <FaFileAlt /> },
 ];
 

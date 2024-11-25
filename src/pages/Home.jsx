@@ -5,6 +5,8 @@ import {
   FaBoxes,
   FaAmbulance,
   FaFileAlt,
+  FaCalendarCheck,
+  FaHospitalAlt,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Switch from "react-switch"; // Import react-switch for the toggle
@@ -117,13 +119,26 @@ const Home = () => {
             link="/nurse"
           />
           <Card
+            title="Appointments"
+            value="Schedule and manage appointments"
+            color="bg-orange-600"
+            icon={FaCalendarCheck}
+            link="/appointment"
+          />
+          <Card
+            title="Admissions"
+            value="Manage patient admissions"
+            color="bg-indigo-700"
+            icon={FaHospitalAlt}
+            link="/admission"
+          />
+          <Card
             title="Inventory"
             value="View and manage medicines"
             color="bg-purple-700"
             icon={FaBoxes}
             link="/inventory"
           />
-          {/* Emergency Services Card */}
           <Card
             title="Emergency Services"
             value="View emergency services"
