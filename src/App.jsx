@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import NavigationDrawer from "./components/NavigationDrawer";
 import Loading from "./components/Loading";
+import TopBar from "./components/TopBar";
 
 // Lazy load pages
 const Home = lazy(() => import("./pages/Home"));
@@ -21,6 +22,7 @@ const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 function App() {
   return (
     <Router>
+      <TopBar />
       <div className="flex">
         <NavigationDrawer />
         <div className="flex-1 p-6">

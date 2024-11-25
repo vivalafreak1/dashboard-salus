@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import {
   FaUserAlt,
   FaCalendarAlt,
-  FaHospitalUser,
   FaBirthdayCake,
   FaVenusMars,
   FaUserMd,
@@ -35,7 +34,24 @@ const CreateAdmission = () => {
   // Handle form submit
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("New Admission Data:", patientData);
+
+    // Retrieve current admissions from localStorage
+    const existingAdmissions =
+      JSON.parse(localStorage.getItem("admissions")) || [];
+
+    // Create a new admission object with a unique ID
+    const newAdmission = {
+      ...patientData,
+      id: existingAdmissions.length
+        ? existingAdmissions[existingAdmissions.length - 1].id + 1
+        : 1,
+    };
+
+    // Save updated admissions to localStorage
+    const updatedAdmissions = [...existingAdmissions, newAdmission];
+    localStorage.setItem("admissions", JSON.stringify(updatedAdmissions));
+
+    // Navigate back to the admissions list
     navigate("/admission");
   };
 

@@ -59,7 +59,7 @@ const DoctorAppointment = () => {
   };
 
   return (
-    <div className="p-4 sm:p-6">
+    <div className="p-4 mb-16 sm:p-6">
       <BackButton />
       <h1 className="mb-4 text-2xl font-bold text-center">
         Doctor Appointments
@@ -77,6 +77,7 @@ const DoctorAppointment = () => {
               <input
                 type="text"
                 name="patientName"
+                placeholder="Enter patient name"
                 value={formData.patientName}
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-500"
@@ -90,6 +91,7 @@ const DoctorAppointment = () => {
               <input
                 type="text"
                 name="doctorName"
+                placeholder="Enter doctor name"
                 value={formData.doctorName}
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-500"
