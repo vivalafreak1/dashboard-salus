@@ -7,7 +7,7 @@ import {
   FaBirthdayCake,
   FaVenusMars,
   FaUserMd,
-  FaNotes,
+  FaNotesMedical,
 } from "react-icons/fa";
 import BackButton from "../components/BackButton";
 
@@ -40,7 +40,7 @@ const CreateAdmission = () => {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-6 mb-16">
       <BackButton />
       <h1 className="mb-6 text-3xl font-bold">Create New Admission</h1>
 
@@ -150,7 +150,7 @@ const CreateAdmission = () => {
             Reason for Admission
           </label>
           <div className="flex items-center p-2 border border-gray-300 rounded-lg">
-            <FaNotes className="mr-2" />
+            <FaNotesMedical className="mr-2" />
             <input
               type="text"
               id="reason"
