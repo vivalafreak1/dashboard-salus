@@ -9,10 +9,12 @@ Currently, two official plugins are available:
 
 
 # Tools
-NodeJS
+- Nodejs
+- NPM (Node Package Manager)
 
 # Installation
 
 - Type `npm i` for intalling modules
 - Type `npm run dev` to run project in development mode
 - Type `npm run build` to build the project
+- Move the `dist` folder to your self hosted server
