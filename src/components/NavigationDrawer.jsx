@@ -9,6 +9,8 @@ import {
   FaFileAlt,
   FaCalendarCheck,
   FaHospitalAlt,
+  FaChevronLeft,
+  FaChevronRight,
 } from "react-icons/fa";
 
 const navigationItems = [
@@ -60,10 +62,10 @@ const NavigationDrawer = () => {
         } bg-green-950 text-white min-h-screen p-6 transition-all duration-300 lg:block hidden`}
       >
         <button onClick={toggleDrawer} className="mb-8 text-2xl text-white">
-          {isExpanded ? "<" : ">"}
+          {isExpanded ? <FaChevronLeft /> : <FaChevronRight />}
         </button>
         {isExpanded && (
-          <h2 className="mb-8 text-3xl font-bold">Hospital Dashboard</h2>
+          <h2 className="mb-8 text-3xl font-bold">Clinic Dashboard</h2>
         )}
         <ul>
           {navigationItems.map((item) => (
@@ -78,7 +80,8 @@ const NavigationDrawer = () => {
         </ul>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 flex items-center justify-around p-4 text-white lg:hidden bg-green-950">
+      {/* Horizontal Scrolling Bottom Navigation for Mobile */}
+      <div className="fixed bottom-0 left-0 right-0 flex justify-start p-4 overflow-x-auto text-white lg:hidden bg-green-950">
         {navigationItems.map((item) => (
           <Link
             key={item.path}

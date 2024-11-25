@@ -1,5 +1,10 @@
 import React, { Suspense, lazy } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 import NavigationDrawer from "./components/NavigationDrawer";
 import Loading from "./components/Loading";
 import TopBar from "./components/TopBar";
@@ -17,14 +22,29 @@ const CreateAdmission = lazy(() => import("./pages/CreateAdmission"));
 const Emergency = lazy(() => import("./pages/Emergency"));
 const Report = lazy(() => import("./pages/Reports"));
 const DoctorAppointment = lazy(() => import("./pages/DoctorAppointment"));
+const LoginPage = lazy(() => import("./pages/LoginPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 function App() {
   return (
     <Router>
-      <TopBar />
+      <AppContent />
+    </Router>
+  );
+}
+
+function AppContent() {
+  const location = useLocation();
+
+  // Check if the current route is the login page
+  const isLoginPage = location.pathname === "/login";
+
+  return (
+    <>
+      {/* Conditionally render TopBar and NavigationDrawer */}
+      {!isLoginPage && <TopBar />}
       <div className="flex">
-        <NavigationDrawer />
+        {!isLoginPage && <NavigationDrawer />}
         <div className="flex-1 p-6">
           <Suspense fallback={<Loading />}>
             <Routes>
@@ -40,12 +60,13 @@ function App() {
               <Route path="/inventory/create" element={<CreateInventory />} />
               <Route path="/emergency" element={<Emergency />} />
               <Route path="/report" element={<Report />} />
+              <Route path="/login" element={<LoginPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Suspense>
         </div>
       </div>
-    </Router>
+    </>
   );
 }
 
