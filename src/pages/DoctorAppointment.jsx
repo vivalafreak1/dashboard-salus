@@ -41,6 +41,8 @@ const DoctorAppointment = () => {
 
   const [editingId, setEditingId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("All");
+  const [displayMode, setDisplayMode] = useState("list"); // State to control display mode
 
   // Get current date for date validation
   const currentDate = new Date().toISOString().split("T")[0];
@@ -98,12 +100,17 @@ const DoctorAppointment = () => {
     setSearchQuery(e.target.value.toLowerCase());
   };
 
-  // Filter appointments based on search query
-  const filteredAppointments = appointments.filter(
-    (appointment) =>
-      appointment.patientName.toLowerCase().includes(searchQuery) ||
-      appointment.doctorName.toLowerCase().includes(searchQuery)
-  );
+  // Filter appointments based on search query and selected status
+  const filteredAppointments = appointments
+    .filter(
+      (appointment) =>
+        appointment.patientName.toLowerCase().includes(searchQuery) ||
+        appointment.doctorName.toLowerCase().includes(searchQuery)
+    )
+    .filter(
+      (appointment) =>
+        selectedStatus === "All" || appointment.status === selectedStatus
+    );
 
   // Sorting appointments by date
   const sortedAppointments = filteredAppointments.sort((a, b) => {
@@ -209,105 +216,124 @@ const DoctorAppointment = () => {
       {/* Appointments List */}
       <div className="mb-6">
         <h2 className="mb-2 text-xl font-semibold">Appointments List</h2>
-        {/* Search Bar */}
-        <div className="mb-6">
-          <input
-            type="text"
-            placeholder="Search by patient or doctor"
-            value={searchQuery}
-            onChange={handleSearchChange}
-            className="w-full px-3 py-2 mb-4 border rounded-md focus:ring focus:ring-blue-500"
-          />
+
+        {/* Display Mode Toggle */}
+        <div className="flex items-center mb-4 space-x-4">
+          <button
+            onClick={() => setDisplayMode("list")}
+            className={`px-4 py-2 text-sm rounded-md ${
+              displayMode === "list" ? "bg-blue-500 text-white" : "bg-gray-100"
+            }`}
+          >
+            List Mode
+          </button>
+          <button
+            onClick={() => setDisplayMode("table")}
+            className={`px-4 py-2 text-sm rounded-md ${
+              displayMode === "table" ? "bg-blue-500 text-white" : "bg-gray-100"
+            }`}
+          >
+            Table Mode
+          </button>
         </div>
-        <div className="overflow-x-auto">
-          <table className="w-full border border-collapse border-gray-200 table-auto">
+
+        {/* Appointments Rendering */}
+        {displayMode === "list" ? (
+          <div className="space-y-4">
+            {sortedAppointments.map((appointment) => (
+              <div
+                key={appointment.id}
+                className="p-4 bg-white border rounded-md shadow-sm"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="font-semibold">{appointment.patientName}</h3>
+                  <div className="flex items-center space-x-2">
+                    <button
+                      onClick={() => handleEdit(appointment)}
+                      className="p-2 text-sm text-blue-500 bg-blue-100 rounded-md hover:bg-blue-200"
+                    >
+                      <FaEdit />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(appointment.id)}
+                      className="p-2 text-sm text-red-500 bg-red-100 rounded-md hover:bg-red-200"
+                    >
+                      <FaTrash />
+                    </button>
+                  </div>
+                </div>
+                <p className="text-sm">
+                  <strong>Doctor:</strong> {appointment.doctorName}
+                </p>
+                <p className="text-sm">
+                  <strong>Date:</strong> {appointment.appointmentDate}{" "}
+                  <strong>Time:</strong> {appointment.time}
+                </p>
+                <p
+                  className={`text-sm ${
+                    appointment.status === "Finished"
+                      ? "text-green-500"
+                      : appointment.status === "Cancelled"
+                      ? "text-red-500"
+                      : "text-yellow-500"
+                  }`}
+                >
+                  <strong>Status:</strong> {appointment.status}
+                </p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <table className="min-w-full table-auto">
             <thead>
-              <tr className="bg-gray-100">
-                <th className="px-4 py-2 text-left border border-gray-200">
-                  ID
-                </th>
-                <th className="px-4 py-2 text-left border border-gray-200">
-                  Patient Name
-                </th>
-                <th className="px-4 py-2 text-left border border-gray-200">
-                  Doctor Name
-                </th>
-                <th className="px-4 py-2 text-left border border-gray-200">
-                  Date
-                </th>
-                <th className="px-4 py-2 text-left border border-gray-200">
-                  Time
-                </th>
-                <th className="px-4 py-2 text-left border border-gray-200">
-                  Status
-                </th>{" "}
-                {/* New column */}
-                <th className="px-4 py-2 text-left border border-gray-200">
-                  Actions
-                </th>
+              <tr>
+                <th className="px-4 py-2 text-left">Patient Name</th>
+                <th className="px-4 py-2 text-left">Doctor Name</th>
+                <th className="px-4 py-2 text-left">Date</th>
+                <th className="px-4 py-2 text-left">Time</th>
+                <th className="px-4 py-2 text-left">Status</th>
+                <th className="px-4 py-2 text-left">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {sortedAppointments.length === 0 ? (
-                <tr>
-                  <td
-                    colSpan="7"
-                    className="px-4 py-2 text-center text-gray-500"
-                  >
-                    No data
+              {sortedAppointments.map((appointment) => (
+                <tr key={appointment.id} className="border-t">
+                  <td className="px-4 py-2">{appointment.patientName}</td>
+                  <td className="px-4 py-2">{appointment.doctorName}</td>
+                  <td className="px-4 py-2">{appointment.appointmentDate}</td>
+                  <td className="px-4 py-2">{appointment.time}</td>
+                  <td className="px-4 py-2">
+                    <span
+                      className={`${
+                        appointment.status === "Finished"
+                          ? "text-green-500"
+                          : appointment.status === "Cancelled"
+                          ? "text-red-500"
+                          : "text-yellow-500"
+                      }`}
+                    >
+                      {appointment.status}
+                    </span>
+                  </td>
+                  <td className="px-4 py-2">
+                    <button
+                      onClick={() => handleEdit(appointment)}
+                      className="p-2 text-sm text-blue-500 bg-blue-100 rounded-md hover:bg-blue-200"
+                    >
+                      <FaEdit />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(appointment.id)}
+                      className="p-2 text-sm text-red-500 bg-red-100 rounded-md hover:bg-red-200"
+                    >
+                      <FaTrash />
+                    </button>
                   </td>
                 </tr>
-              ) : (
-                sortedAppointments.map((appointment) => (
-                  <tr key={appointment.id}>
-                    <td className="px-4 py-2 border border-gray-200">
-                      {appointment.id}
-                    </td>
-                    <td className="px-4 py-2 border border-gray-200">
-                      {appointment.patientName}
-                    </td>
-                    <td className="px-4 py-2 border border-gray-200">
-                      {appointment.doctorName}
-                    </td>
-                    <td className="px-4 py-2 border border-gray-200">
-                      {appointment.appointmentDate}
-                    </td>
-                    <td className="px-4 py-2 border border-gray-200">
-                      {appointment.time}
-                    </td>
-                    <td className="px-4 py-2 border border-gray-200">
-                      <span
-                        className={`px-2 py-1 rounded ${
-                          appointment.status === "Ongoing"
-                            ? "bg-yellow-400"
-                            : appointment.status === "Finished"
-                            ? "bg-green-400"
-                            : "bg-red-400"
-                        }`}
-                      >
-                        {appointment.status}
-                      </span>
-                    </td>
-                    <td className="px-4 py-2 border border-gray-200">
-                      <button
-                        onClick={() => handleEdit(appointment)}
-                        className="px-2 py-1 mr-2 text-white bg-blue-500 rounded-md hover:bg-blue-600"
-                      >
-                        <FaEdit />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(appointment.id)}
-                        className="px-2 py-1 text-white bg-red-500 rounded-md hover:bg-red-600"
-                      >
-                        <FaTrash />
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              )}
+              ))}
             </tbody>
           </table>
-        </div>
+        )}
       </div>
     </div>
   );
