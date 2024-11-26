@@ -216,7 +216,6 @@ const DoctorAppointment = () => {
       {/* Appointments List */}
       <div className="mb-6">
         <h2 className="mb-2 text-xl font-semibold">Appointments List</h2>
-
         {/* Display Mode Toggle */}
         <div className="flex items-center mb-4 space-x-4">
           <button
@@ -237,51 +236,79 @@ const DoctorAppointment = () => {
           </button>
         </div>
 
+        {/* Search and Status Filter */}
+        <div className="flex items-center mb-4 space-x-4">
+          {/* Search Input */}
+          <input
+            type="text"
+            placeholder="Search by Patient or Doctor"
+            value={searchQuery}
+            onChange={handleSearchChange}
+            className="w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-500"
+          />
+
+          {/* Status Filter Dropdown */}
+          <select
+            value={selectedStatus}
+            onChange={(e) => setSelectedStatus(e.target.value)}
+            className="px-3 py-2 border rounded-md focus:ring focus:ring-blue-500"
+          >
+            <option value="All">All Statuses</option>
+            <option value="Ongoing">Ongoing</option>
+            <option value="Finished">Finished</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        </div>
+
         {/* Appointments Rendering */}
         {displayMode === "list" ? (
           <div className="space-y-4">
-            {sortedAppointments.map((appointment) => (
-              <div
-                key={appointment.id}
-                className="p-4 bg-white border rounded-md shadow-sm"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-semibold">{appointment.patientName}</h3>
-                  <div className="flex items-center space-x-2">
-                    <button
-                      onClick={() => handleEdit(appointment)}
-                      className="p-2 text-sm text-blue-500 bg-blue-100 rounded-md hover:bg-blue-200"
-                    >
-                      <FaEdit />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(appointment.id)}
-                      className="p-2 text-sm text-red-500 bg-red-100 rounded-md hover:bg-red-200"
-                    >
-                      <FaTrash />
-                    </button>
-                  </div>
-                </div>
-                <p className="text-sm">
-                  <strong>Doctor:</strong> {appointment.doctorName}
-                </p>
-                <p className="text-sm">
-                  <strong>Date:</strong> {appointment.appointmentDate}{" "}
-                  <strong>Time:</strong> {appointment.time}
-                </p>
-                <p
-                  className={`text-sm ${
-                    appointment.status === "Finished"
-                      ? "text-green-500"
-                      : appointment.status === "Cancelled"
-                      ? "text-red-500"
-                      : "text-yellow-500"
-                  }`}
+            {sortedAppointments.length === 0 ? (
+              <p className="text-center text-gray-500">No Data</p>
+            ) : (
+              sortedAppointments.map((appointment) => (
+                <div
+                  key={appointment.id}
+                  className="p-4 bg-white border rounded-md shadow-sm"
                 >
-                  <strong>Status:</strong> {appointment.status}
-                </p>
-              </div>
-            ))}
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-semibold">{appointment.patientName}</h3>
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={() => handleEdit(appointment)}
+                        className="p-2 text-sm text-blue-500 bg-blue-100 rounded-md hover:bg-blue-200"
+                      >
+                        <FaEdit />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(appointment.id)}
+                        className="p-2 text-sm text-red-500 bg-red-100 rounded-md hover:bg-red-200"
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
+                  </div>
+                  <p className="text-sm">
+                    <strong>Doctor:</strong> {appointment.doctorName}
+                  </p>
+                  <p className="text-sm">
+                    <strong>Date:</strong> {appointment.appointmentDate}{" "}
+                    <strong>Time:</strong> {appointment.time}
+                  </p>
+                  <p
+                    className={`text-sm ${
+                      appointment.status === "Finished"
+                        ? "text-green-500"
+                        : appointment.status === "Cancelled"
+                        ? "text-red-500"
+                        : "text-yellow-500"
+                    }`}
+                  >
+                    <strong>Status:</strong> {appointment.status}
+                  </p>
+                </div>
+              ))
+            )}
           </div>
         ) : (
           <table className="min-w-full table-auto">
@@ -296,41 +323,52 @@ const DoctorAppointment = () => {
               </tr>
             </thead>
             <tbody>
-              {sortedAppointments.map((appointment) => (
-                <tr key={appointment.id} className="border-t">
-                  <td className="px-4 py-2">{appointment.patientName}</td>
-                  <td className="px-4 py-2">{appointment.doctorName}</td>
-                  <td className="px-4 py-2">{appointment.appointmentDate}</td>
-                  <td className="px-4 py-2">{appointment.time}</td>
-                  <td className="px-4 py-2">
-                    <span
-                      className={`${
-                        appointment.status === "Finished"
-                          ? "text-green-500"
-                          : appointment.status === "Cancelled"
-                          ? "text-red-500"
-                          : "text-yellow-500"
-                      }`}
-                    >
-                      {appointment.status}
-                    </span>
-                  </td>
-                  <td className="px-4 py-2">
-                    <button
-                      onClick={() => handleEdit(appointment)}
-                      className="p-2 text-sm text-blue-500 bg-blue-100 rounded-md hover:bg-blue-200"
-                    >
-                      <FaEdit />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(appointment.id)}
-                      className="p-2 text-sm text-red-500 bg-red-100 rounded-md hover:bg-red-200"
-                    >
-                      <FaTrash />
-                    </button>
+              {sortedAppointments.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan="6"
+                    className="px-4 py-2 text-center text-gray-500"
+                  >
+                    No Data
                   </td>
                 </tr>
-              ))}
+              ) : (
+                sortedAppointments.map((appointment) => (
+                  <tr key={appointment.id} className="border-t">
+                    <td className="px-4 py-2">{appointment.patientName}</td>
+                    <td className="px-4 py-2">{appointment.doctorName}</td>
+                    <td className="px-4 py-2">{appointment.appointmentDate}</td>
+                    <td className="px-4 py-2">{appointment.time}</td>
+                    <td className="px-4 py-2">
+                      <span
+                        className={`${
+                          appointment.status === "Finished"
+                            ? "text-green-500"
+                            : appointment.status === "Cancelled"
+                            ? "text-red-500"
+                            : "text-yellow-500"
+                        }`}
+                      >
+                        {appointment.status}
+                      </span>
+                    </td>
+                    <td className="px-4 py-2">
+                      <button
+                        onClick={() => handleEdit(appointment)}
+                        className="p-2 mr-1 text-sm text-blue-500 bg-blue-100 rounded-md hover:bg-blue-200"
+                      >
+                        <FaEdit />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(appointment.id)}
+                        className="p-2 text-sm text-red-500 bg-red-100 rounded-md hover:bg-red-200"
+                      >
+                        <FaTrash />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         )}

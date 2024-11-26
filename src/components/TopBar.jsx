@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const TopBar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [user, setUser] = useState({ name: "John Doe" }); // Default user name
+  const [user, setUser] = useState({ name: "Arief Taufik Rahman" }); // Default user name
   const dropdownRef = useRef(null); // To detect clicks outside of the dropdown
   const navigate = useNavigate();
 
