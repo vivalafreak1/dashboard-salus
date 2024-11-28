@@ -7,6 +7,7 @@ import {
   FaFileAlt,
   FaCalendarCheck,
   FaHospitalAlt,
+  FaHeartbeat,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Switch from "react-switch"; // Import react-switch for the toggle
@@ -117,6 +118,13 @@ const Home = () => {
             color="bg-blue-700"
             icon={FaUsers}
             link="/nurse"
+          />
+          <Card
+            title="Patients"
+            value="View and manage patients"
+            color="bg-pink-700"
+            icon={FaHeartbeat}
+            link="/patients"
           />
           <Card
             title="Appointments"

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { FaTrash, FaEdit } from "react-icons/fa";
 import BackButton from "../components/BackButton";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 
 const DoctorAppointment = () => {
   // State for appointments and form data
@@ -43,6 +45,8 @@ const DoctorAppointment = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("All");
   const [displayMode, setDisplayMode] = useState("list"); // State to control display mode
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [hoveredDate, setHoveredDate] = useState(null); // State to store hovered date for hover details
 
   // Get current date for date validation
   const currentDate = new Date().toISOString().split("T")[0];
@@ -100,8 +104,28 @@ const DoctorAppointment = () => {
     setSearchQuery(e.target.value.toLowerCase());
   };
 
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
+
   // Filter appointments based on search query and selected status
   const filteredAppointments = appointments
+    .filter(
+      (appointment) =>
+        appointment.patientName.toLowerCase().includes(searchQuery) ||
+        appointment.doctorName.toLowerCase().includes(searchQuery)
+    )
+    .filter(
+      (appointment) =>
+        selectedStatus === "All" || appointment.status === selectedStatus
+    )
+    .filter(
+      (appointment) =>
+        new Date(appointment.appointmentDate).toDateString() ===
+        selectedDate.toDateString()
+    );
+
+  const historyAppointments = appointments
     .filter(
       (appointment) =>
         appointment.patientName.toLowerCase().includes(searchQuery) ||
@@ -113,11 +137,47 @@ const DoctorAppointment = () => {
     );
 
   // Sorting appointments by date
-  const sortedAppointments = filteredAppointments.sort((a, b) => {
+  const sortedAppointments = historyAppointments.sort((a, b) => {
     const dateA = new Date(a.appointmentDate);
     const dateB = new Date(b.appointmentDate);
     return dateA - dateB;
   });
+
+  // Highlight days with appointments
+  const tileClassName = ({ date }) => {
+    const appointmentsOnDate = appointments.filter(
+      (appointment) =>
+        new Date(appointment.appointmentDate).toDateString() ===
+        date.toDateString()
+    );
+    if (appointmentsOnDate.length > 0) {
+      return "bg-blue-100"; // Highlight days with appointments
+    }
+    return "";
+  };
+
+  const tileContent = ({ date }) => {
+    const appointmentsOnDate = appointments.filter(
+      (appointment) =>
+        new Date(appointment.appointmentDate).toDateString() ===
+        date.toDateString()
+    );
+    if (appointmentsOnDate.length > 0) {
+      return (
+        <div className="text-xs text-center">
+          {appointmentsOnDate.map((appointment) => (
+            <div key={appointment.id} className="p-1">
+              <div className="overflow-hidden text-blue-600">
+                {appointment.doctorName}
+              </div>
+              <div className="text-gray-600">{appointment.time}</div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
     <div className="p-4 mb-16 sm:p-6">
@@ -125,6 +185,77 @@ const DoctorAppointment = () => {
       <h1 className="mb-4 text-2xl font-bold text-center">
         Doctor Appointments
       </h1>
+
+      {/* Calendar Display */}
+      <div className="mb-6">
+        <Calendar
+          onChange={handleDateChange}
+          value={selectedDate}
+          tileClassName={tileClassName}
+          tileContent={tileContent}
+          onMouseEnter={(e) => setHoveredDate(e.target)} // Hover event to show details
+        />
+      </div>
+
+      {/* Display Appointment Info on Calendar Date Hover */}
+      <div className="mb-6">
+        <h2 className="mb-2 text-xl font-semibold">
+          Appointments on {selectedDate.toDateString()}
+        </h2>
+        <div className="space-y-4">
+          {filteredAppointments.length === 0 ? (
+            <p className="text-center text-gray-500">No Appointments</p>
+          ) : (
+            appointments
+              .filter(
+                (appointment) =>
+                  new Date(appointment.appointmentDate).toDateString() ===
+                  selectedDate.toDateString()
+              )
+              .map((appointment) => (
+                <div
+                  key={appointment.id}
+                  className="p-4 bg-white border rounded-md shadow-sm"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-semibold">{appointment.patientName}</h3>
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={() => handleEdit(appointment)}
+                        className="p-2 text-sm text-blue-500 bg-blue-100 rounded-md hover:bg-blue-200"
+                      >
+                        <FaEdit />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(appointment.id)}
+                        className="p-2 text-sm text-red-500 bg-red-100 rounded-md hover:bg-red-200"
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
+                  </div>
+                  <p className="text-sm">
+                    <strong>Doctor:</strong> {appointment.doctorName}
+                  </p>
+                  <p className="text-sm">
+                    <strong>Time:</strong> {appointment.time}
+                  </p>
+                  <p
+                    className={`text-sm ${
+                      appointment.status === "Finished"
+                        ? "text-green-500"
+                        : appointment.status === "Cancelled"
+                        ? "text-red-500"
+                        : "text-yellow-500"
+                    }`}
+                  >
+                    <strong>Status:</strong> {appointment.status}
+                  </p>
+                </div>
+              ))
+          )}
+        </div>
+      </div>
 
       {/* Create/Update Appointment Form */}
       <div className="mb-6">

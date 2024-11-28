@@ -11,12 +11,14 @@ import {
   FaHospitalAlt,
   FaChevronLeft,
   FaChevronRight,
+  FaHeartbeat,
 } from "react-icons/fa";
 
 const navigationItems = [
   { path: "/", label: "Home", icon: <FaHome /> },
   { path: "/doctor", label: "Doctors", icon: <FaUserMd /> },
   { path: "/nurse", label: "Nurses", icon: <FaUsers /> },
+  { path: "/patients", label: "Patients", icon: <FaHeartbeat /> },
   { path: "/appointment", label: "Appointments", icon: <FaCalendarCheck /> },
   { path: "/inventory", label: "Inventory", icon: <FaBoxes /> },
   { path: "/admission", label: "Admissions", icon: <FaHospitalAlt /> },

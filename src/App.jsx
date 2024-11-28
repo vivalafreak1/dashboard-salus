@@ -15,6 +15,7 @@ const Doctor = lazy(() => import("./pages/Doctor"));
 const CreateDoctor = lazy(() => import("./pages/CreateDoctor"));
 const Nurse = lazy(() => import("./pages/Nurse"));
 const CreateNurse = lazy(() => import("./pages/CreateNurse"));
+const Patients = lazy(() => import("./pages/Patients"));
 const Inventory = lazy(() => import("./pages/Inventory"));
 const CreateInventory = lazy(() => import("./pages/CreateInventory"));
 const Admission = lazy(() => import("./pages/Admission"));
@@ -53,6 +54,7 @@ function AppContent() {
               <Route path="/doctor/create" element={<CreateDoctor />} />
               <Route path="/nurse" element={<Nurse />} />
               <Route path="/nurse/create" element={<CreateNurse />} />
+              <Route path="/patients" element={<Patients />} />
               <Route path="/appointment" element={<DoctorAppointment />} />
               <Route path="/admission" element={<Admission />} />
               <Route path="/admission/create" element={<CreateAdmission />} />
