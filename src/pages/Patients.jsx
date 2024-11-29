@@ -42,6 +42,8 @@ export default function Patients() {
 
   const [editingId, setEditingId] = useState(null);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
   // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -84,6 +86,14 @@ export default function Patients() {
   const handleEdit = (patient) => {
     setFormData(patient);
     setEditingId(patient.id);
+  };
+
+  const totalPages = Math.ceil(patients.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentPatients = patients.slice(startIndex, startIndex + itemsPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
   };
 
   return (
@@ -180,53 +190,73 @@ export default function Patients() {
         {patients.length === 0 ? (
           <p className="text-center text-gray-500">No Patients Found</p>
         ) : (
-          <table className="min-w-full bg-white border border-gray-200 rounded-md shadow-sm">
-            <thead>
-              <tr>
-                <th className="px-4 py-2 text-left border-b">Name</th>
-                <th className="px-4 py-2 text-left border-b">Age</th>
-                <th className="px-4 py-2 text-left border-b">Gender</th>
-                <th className="px-4 py-2 text-left border-b">Phone Number</th>
-                <th className="px-4 py-2 text-left border-b">Email</th>
-                <th className="px-4 py-2 text-left border-b">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {patients.map((patient) => (
-                <tr key={patient.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-2 border-b">
-                    {" "}
-                    <Link
-                      to={`/patients/detail/${patient.id}`}
-                      className="text-blue-500 hover:text-blue-600"
-                    >
-                      {patient.name}
-                    </Link>
-                  </td>
-                  <td className="px-4 py-2 border-b">{patient.age}</td>
-                  <td className="px-4 py-2 border-b">{patient.gender}</td>
-                  <td className="px-4 py-2 border-b">{patient.phoneNumber}</td>
-                  <td className="px-4 py-2 border-b">{patient.email}</td>
-                  <td className="px-4 py-2 border-b">
-                    <div className="flex items-center space-x-2">
-                      <button
-                        onClick={() => handleEdit(patient)}
-                        className="p-2 text-sm text-blue-500 bg-blue-100 rounded-md hover:bg-blue-200"
-                      >
-                        <FaEdit />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(patient.id)}
-                        className="p-2 text-sm text-red-500 bg-red-100 rounded-md hover:bg-red-200"
-                      >
-                        <FaTrash />
-                      </button>
-                    </div>
-                  </td>
+          <>
+            <table className="min-w-full bg-white border border-gray-200 rounded-md shadow-sm">
+              <thead>
+                <tr>
+                  <th className="px-4 py-2 text-left border-b">Name</th>
+                  <th className="px-4 py-2 text-left border-b">Age</th>
+                  <th className="px-4 py-2 text-left border-b">Gender</th>
+                  <th className="px-4 py-2 text-left border-b">Phone Number</th>
+                  <th className="px-4 py-2 text-left border-b">Email</th>
+                  <th className="px-4 py-2 text-left border-b">Actions</th>
                 </tr>
+              </thead>
+              <tbody>
+                {currentPatients.map((patient) => (
+                  <tr key={patient.id} className="hover:bg-gray-50">
+                    <td className="px-4 py-2 border-b">
+                      <Link
+                        to={`/patients/detail/${patient.id}`}
+                        className="text-blue-500 hover:text-blue-600"
+                      >
+                        {patient.name}
+                      </Link>
+                    </td>
+                    <td className="px-4 py-2 border-b">{patient.age}</td>
+                    <td className="px-4 py-2 border-b">{patient.gender}</td>
+                    <td className="px-4 py-2 border-b">
+                      {patient.phoneNumber}
+                    </td>
+                    <td className="px-4 py-2 border-b">{patient.email}</td>
+                    <td className="px-4 py-2 border-b">
+                      <div className="flex items-center space-x-2">
+                        <button
+                          onClick={() => handleEdit(patient)}
+                          className="p-2 text-sm text-blue-500 bg-blue-100 rounded-md hover:bg-blue-200"
+                        >
+                          <FaEdit />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(patient.id)}
+                          className="p-2 text-sm text-red-500 bg-red-100 rounded-md hover:bg-red-200"
+                        >
+                          <FaTrash />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            {/* Pagination Controls */}
+            <div className="flex justify-center mt-4 space-x-2">
+              {Array.from({ length: totalPages }).map((_, index) => (
+                <button
+                  key={index}
+                  className={`px-4 py-2 rounded-md ${
+                    currentPage === index + 1
+                      ? "bg-green-700 text-white"
+                      : "bg-white text-black hover:bg-green-200"
+                  }`}
+                  onClick={() => handlePageChange(index + 1)}
+                >
+                  {index + 1}
+                </button>
               ))}
-            </tbody>
-          </table>
+            </div>
+          </>
         )}
       </div>
     </div>
