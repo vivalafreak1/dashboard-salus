@@ -7,6 +7,7 @@ import {
   FaEnvelope,
   FaCalendarAlt,
   FaNotesMedical,
+  FaTrashAlt,
 } from "react-icons/fa";
 
 export default function PatientDetail() {
@@ -65,9 +66,10 @@ export default function PatientDetail() {
     ],
   };
 
-  const [patient] = useState(initialPatient);
+  const [patient, setPatient] = useState(initialPatient);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isEditing, setIsEditing] = useState(false); // State to toggle edit mode
 
   const itemsPerPage = 3;
 
@@ -91,6 +93,30 @@ export default function PatientDetail() {
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
+  const handleEditToggle = () => {
+    setIsEditing(!isEditing);
+  };
+
+  const handleSaveChanges = () => {
+    // Here you can send the updated patient data to a server or local storage
+    setIsEditing(false); // Exit edit mode after saving
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setPatient({
+      ...patient,
+      [name]: value,
+    });
+  };
+
+  const handleDeleteHistory = (id) => {
+    setPatient({
+      ...patient,
+      medicalHistory: patient.medicalHistory.filter((entry) => entry.id !== id),
+    });
+  };
+
   return (
     <div className="p-4 mb-16 sm:p-6">
       <BackButton />
@@ -100,20 +126,84 @@ export default function PatientDetail() {
         {/* Patient Info Section */}
         <div className="p-4 bg-white rounded-lg shadow-md">
           <div className="space-y-2">
+            {/* Name */}
             <div className="flex items-center">
-              <FaUser className="mr-2" /> <span>Name: {patient.name}</span>
+              <FaUser className="mr-2" />
+              {isEditing ? (
+                <input
+                  type="text"
+                  name="name"
+                  value={patient.name}
+                  onChange={handleInputChange}
+                  className="px-2 py-1 border border-gray-300 rounded-md"
+                />
+              ) : (
+                <span>Name: {patient.name}</span>
+              )}
             </div>
+            {/* Age */}
             <div className="flex items-center">
-              <FaCalendarAlt className="mr-2" /> <span>Age: {patient.age}</span>
+              <FaCalendarAlt className="mr-2" />
+              {isEditing ? (
+                <input
+                  type="number"
+                  name="age"
+                  value={patient.age}
+                  onChange={handleInputChange}
+                  className="px-2 py-1 border border-gray-300 rounded-md"
+                />
+              ) : (
+                <span>Age: {patient.age}</span>
+              )}
             </div>
+            {/* Phone */}
             <div className="flex items-center">
-              <FaPhone className="mr-2" />{" "}
-              <span>Phone: {patient.phoneNumber}</span>
+              <FaPhone className="mr-2" />
+              {isEditing ? (
+                <input
+                  type="text"
+                  name="phoneNumber"
+                  value={patient.phoneNumber}
+                  onChange={handleInputChange}
+                  className="px-2 py-1 border border-gray-300 rounded-md"
+                />
+              ) : (
+                <span>Phone: {patient.phoneNumber}</span>
+              )}
             </div>
+            {/* Email */}
             <div className="flex items-center">
-              <FaEnvelope className="mr-2" />{" "}
-              <span>Email: {patient.email}</span>
+              <FaEnvelope className="mr-2" />
+              {isEditing ? (
+                <input
+                  type="email"
+                  name="email"
+                  value={patient.email}
+                  onChange={handleInputChange}
+                  className="px-2 py-1 border border-gray-300 rounded-md"
+                />
+              ) : (
+                <span>Email: {patient.email}</span>
+              )}
             </div>
+          </div>
+
+          {/* Edit/Save Button */}
+          <div className="flex justify-end mt-4">
+            <button
+              onClick={handleEditToggle}
+              className="px-4 py-2 mr-2 text-white bg-blue-500 rounded-md"
+            >
+              {isEditing ? "Cancel" : "Edit"}
+            </button>
+            {isEditing && (
+              <button
+                onClick={handleSaveChanges}
+                className="px-4 py-2 text-white bg-green-500 rounded-md"
+              >
+                Save
+              </button>
+            )}
           </div>
         </div>
 
@@ -139,6 +229,10 @@ export default function PatientDetail() {
                 </th>
                 <th className="px-4 py-2 text-sm text-left border">Notes</th>
                 <th className="px-4 py-2 text-sm text-left border">Doctor</th>
+                <th className="px-4 py-2 text-sm text-left border">
+                  Action
+                </th>{" "}
+                {/* New Action Column */}
               </tr>
             </thead>
             <tbody>
@@ -151,12 +245,20 @@ export default function PatientDetail() {
                     </td>
                     <td className="px-4 py-2 text-sm border">{entry.notes}</td>
                     <td className="px-4 py-2 text-sm border">{entry.doctor}</td>
+                    <td className="px-4 py-2 text-sm text-center border">
+                      <button
+                        onClick={() => handleDeleteHistory(entry.id)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <FaTrashAlt />
+                      </button>
+                    </td>
                   </tr>
                 ))
               ) : (
                 <tr>
                   <td
-                    colSpan="4"
+                    colSpan="5"
                     className="px-4 py-2 text-sm text-center border"
                   >
                     No records found.
@@ -173,11 +275,11 @@ export default function PatientDetail() {
                 <button
                   key={index + 1}
                   onClick={() => handlePageChange(index + 1)}
-                  className={`px-4 py-2 border rounded-md ${
-                    currentPage === index + 1
+                  className={`px-4 py-2 rounded-md border ${
+                    index + 1 === currentPage
                       ? "bg-green-700 text-white"
                       : "bg-white text-black hover:bg-green-200"
-                  } text-sm`}
+                  }`}
                 >
                   {index + 1}
                 </button>
