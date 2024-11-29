@@ -35,41 +35,20 @@ export default function PatientDetail() {
         notes: "Recommended physiotherapy",
         doctor: "Dr. Johnson",
       },
-      {
-        id: 3,
-        date: "2024-05-20",
-        condition: "Back Pain",
-        notes: "Prescribed painkillers",
-        doctor: "Dr. Taylor",
-      },
-      {
-        id: 4,
-        date: "2024-06-12",
-        condition: "Hypertension",
-        notes: "Recommended low-sodium diet",
-        doctor: "Dr. Green",
-      },
-      {
-        id: 5,
-        date: "2024-07-03",
-        condition: "Allergy",
-        notes: "Prescribed antihistamines",
-        doctor: "Dr. White",
-      },
-      {
-        id: 6,
-        date: "2024-08-21",
-        condition: "Diabetes Check",
-        notes: "Routine check-up",
-        doctor: "Dr. Black",
-      },
+      // Other existing entries...
     ],
   };
 
   const [patient, setPatient] = useState(initialPatient);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isEditing, setIsEditing] = useState(false); // State to toggle edit mode
+  const [isEditing, setIsEditing] = useState(false);
+  const [newEntry, setNewEntry] = useState({
+    date: "",
+    condition: "",
+    notes: "",
+    doctor: "",
+  });
 
   const itemsPerPage = 3;
 
@@ -99,7 +78,7 @@ export default function PatientDetail() {
 
   const handleSaveChanges = () => {
     // Here you can send the updated patient data to a server or local storage
-    setIsEditing(false); // Exit edit mode after saving
+    setIsEditing(false);
   };
 
   const handleInputChange = (e) => {
@@ -114,6 +93,43 @@ export default function PatientDetail() {
     setPatient({
       ...patient,
       medicalHistory: patient.medicalHistory.filter((entry) => entry.id !== id),
+    });
+  };
+
+  // Handle adding new medical history entry
+  const handleAddNewHistory = (e) => {
+    e.preventDefault(); // Prevent default form submission
+
+    // Check if all required fields are filled
+    if (
+      !newEntry.date ||
+      !newEntry.condition ||
+      !newEntry.notes ||
+      !newEntry.doctor
+    ) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
+    const newId = patient.medicalHistory.length
+      ? patient.medicalHistory[patient.medicalHistory.length - 1].id + 1
+      : 1;
+
+    const newMedicalHistory = {
+      ...newEntry,
+      id: newId,
+    };
+
+    setPatient({
+      ...patient,
+      medicalHistory: [...patient.medicalHistory, newMedicalHistory],
+    });
+
+    setNewEntry({
+      date: "",
+      condition: "",
+      notes: "",
+      doctor: "",
     });
   };
 
@@ -229,63 +245,109 @@ export default function PatientDetail() {
                 </th>
                 <th className="px-4 py-2 text-sm text-left border">Notes</th>
                 <th className="px-4 py-2 text-sm text-left border">Doctor</th>
-                <th className="px-4 py-2 text-sm text-left border">
-                  Action
-                </th>{" "}
-                {/* New Action Column */}
+                <th className="px-4 py-2 text-sm text-left border">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {currentHistory.length > 0 ? (
-                currentHistory.map((entry) => (
-                  <tr key={entry.id}>
-                    <td className="px-4 py-2 text-sm border">{entry.date}</td>
-                    <td className="px-4 py-2 text-sm border">
-                      {entry.condition}
-                    </td>
-                    <td className="px-4 py-2 text-sm border">{entry.notes}</td>
-                    <td className="px-4 py-2 text-sm border">{entry.doctor}</td>
-                    <td className="px-4 py-2 text-sm text-center border">
-                      <button
-                        onClick={() => handleDeleteHistory(entry.id)}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        <FaTrashAlt />
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan="5"
-                    className="px-4 py-2 text-sm text-center border"
-                  >
-                    No records found.
+              {currentHistory.map((entry) => (
+                <tr key={entry.id}>
+                  <td className="px-4 py-2 border">{entry.date}</td>
+                  <td className="px-4 py-2 border">{entry.condition}</td>
+                  <td className="px-4 py-2 border">{entry.notes}</td>
+                  <td className="px-4 py-2 border">{entry.doctor}</td>
+                  <td className="px-4 py-2 border">
+                    <button
+                      onClick={() => handleDeleteHistory(entry.id)}
+                      className="text-red-600 hover:text-red-800"
+                    >
+                      <FaTrashAlt />
+                    </button>
                   </td>
                 </tr>
-              )}
+              ))}
             </tbody>
           </table>
 
           {/* Pagination */}
-          {filteredHistory.length > itemsPerPage && (
-            <div className="flex justify-center mt-4 space-x-2">
-              {Array.from({ length: totalPages }, (_, index) => (
-                <button
-                  key={index + 1}
-                  onClick={() => handlePageChange(index + 1)}
-                  className={`px-4 py-2 rounded-md border ${
-                    index + 1 === currentPage
-                      ? "bg-green-700 text-white"
-                      : "bg-white text-black hover:bg-green-200"
-                  }`}
-                >
-                  {index + 1}
-                </button>
-              ))}
+          <div className="flex justify-center mt-4 space-x-2">
+            {Array.from({ length: totalPages }, (_, index) => (
+              <button
+                key={index + 1}
+                onClick={() => handlePageChange(index + 1)}
+                className={`px-4 py-2 border rounded-md ${
+                  currentPage === index + 1
+                    ? "bg-green-700 text-white"
+                    : "bg-white text-black hover:bg-green-200"
+                }`}
+              >
+                {index + 1}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Add New Medical History Section */}
+        <div className="p-4 bg-white rounded-lg shadow-md">
+          <h2 className="mb-4 text-xl font-bold">Add New Medical History</h2>
+
+          <form onSubmit={handleAddNewHistory}>
+            <div className="space-y-4">
+              <input
+                required
+                type="date"
+                name="date"
+                value={newEntry.date}
+                onChange={(e) =>
+                  setNewEntry({ ...newEntry, date: e.target.value })
+                }
+                className="w-full px-3 py-2 border rounded-md"
+              />
+              <input
+                required
+                type="text"
+                name="condition"
+                value={newEntry.condition}
+                onChange={(e) =>
+                  setNewEntry({ ...newEntry, condition: e.target.value })
+                }
+                placeholder="Condition"
+                className="w-full px-3 py-2 border rounded-md"
+                maxLength={75}
+              />
+              <textarea
+                required
+                name="notes"
+                value={newEntry.notes}
+                onChange={(e) =>
+                  setNewEntry({ ...newEntry, notes: e.target.value })
+                }
+                placeholder="Notes"
+                className="w-full px-3 py-2 border rounded-md"
+                maxLength={150}
+              />
+              <input
+                required
+                type="text"
+                name="doctor"
+                value={newEntry.doctor}
+                onChange={(e) =>
+                  setNewEntry({ ...newEntry, doctor: e.target.value })
+                }
+                placeholder="Doctor"
+                className="w-full px-3 py-2 border rounded-md"
+                maxLength={50}
+              />
             </div>
-          )}
+
+            <div className="flex justify-end mt-4">
+              <button
+                type="submit"
+                className="px-4 py-2 text-white bg-green-500 rounded-md"
+              >
+                Add Entry
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
