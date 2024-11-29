@@ -167,8 +167,21 @@ const Home = () => {
     });
   };
 
+  // Example doctor and nurse data
+  const doctors = [
+    { id: 1, name: "Dr. John Doe", specialization: "Cardiology" },
+    { id: 2, name: "Dr. Jane Smith", specialization: "Neurology" },
+    { id: 3, name: "Dr. Mary Johnson", specialization: "Pediatrics" },
+  ];
+
+  const nurses = [
+    { id: 1, name: "Nurse Alice", department: "Emergency" },
+    { id: 2, name: "Nurse Bob", department: "ICU" },
+    { id: 3, name: "Nurse Charlie", department: "Orthopedics" },
+  ];
+
   return (
-    <div className="p-4">
+    <div className="p-4 mb-16">
       <h1 className="mb-4 text-3xl font-bold">Home</h1>
 
       {/* Compact Mode Toggle */}
@@ -220,6 +233,49 @@ const Home = () => {
           ))}
         </div>
       )}
+
+      {/* Doctors and Nurses Tables */}
+      <div className="grid grid-cols-1 gap-6 mt-8 md:grid-cols-2">
+        <div className="p-6 bg-white rounded-lg shadow-lg">
+          <h2 className="mb-4 text-2xl font-bold">Doctors</h2>
+          <table className="min-w-full table-auto">
+            <thead>
+              <tr className="bg-gray-200">
+                <th className="px-4 py-2">Name</th>
+                <th className="px-4 py-2">Specialization</th>
+              </tr>
+            </thead>
+            <tbody>
+              {doctors.map((doctor) => (
+                <tr key={doctor.id}>
+                  <td className="px-4 py-2 border">{doctor.name}</td>
+                  <td className="px-4 py-2 border">{doctor.specialization}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="p-6 bg-white rounded-lg shadow-lg">
+          <h2 className="mb-4 text-2xl font-bold">Nurses</h2>
+          <table className="min-w-full table-auto">
+            <thead>
+              <tr className="bg-gray-200">
+                <th className="px-4 py-2">Name</th>
+                <th className="px-4 py-2">Department</th>
+              </tr>
+            </thead>
+            <tbody>
+              {nurses.map((nurse) => (
+                <tr key={nurse.id}>
+                  <td className="px-4 py-2 border">{nurse.name}</td>
+                  <td className="px-4 py-2 border">{nurse.department}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 };
