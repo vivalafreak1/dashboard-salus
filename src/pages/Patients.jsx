@@ -4,7 +4,6 @@ import BackButton from "../components/BackButton";
 import { Link } from "react-router-dom";
 
 export default function Patients() {
-  // State for patients and form data
   const [patients, setPatients] = useState([
     {
       id: 1,
@@ -22,14 +21,6 @@ export default function Patients() {
       phoneNumber: "987-654-3210",
       email: "jane.smith@example.com",
     },
-    {
-      id: 3,
-      name: "Bob Johnson",
-      age: 40,
-      gender: "Male",
-      phoneNumber: "123-456-7890",
-      email: "bob.johnson@example.com",
-    },
   ]);
 
   const [formData, setFormData] = useState({
@@ -41,16 +32,17 @@ export default function Patients() {
   });
 
   const [editingId, setEditingId] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
 
+  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
-  // Handle form input changes
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     if (editingId) {
@@ -74,20 +66,22 @@ export default function Patients() {
       phoneNumber: "",
       email: "",
     });
+
+    setShowPopup(false);
   };
 
-  // Handle deleting a patient
   const handleDelete = (id) => {
     const updatedPatients = patients.filter((patient) => patient.id !== id);
     setPatients(updatedPatients);
   };
 
-  // Handle editing a patient
   const handleEdit = (patient) => {
     setFormData(patient);
     setEditingId(patient.id);
+    setShowPopup(true);
   };
 
+  // Pagination
   const totalPages = Math.ceil(patients.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentPatients = patients.slice(startIndex, startIndex + itemsPerPage);
@@ -101,88 +95,115 @@ export default function Patients() {
       <BackButton />
       <h1 className="mb-4 text-2xl font-bold text-center">Manage Patients</h1>
 
-      {/* Create/Update Patient Form */}
-      <div className="mb-6">
-        <h2 className="mb-2 text-xl font-semibold">
-          {editingId ? "Edit Patient" : "Add New Patient"}
-        </h2>
-        <form onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            <div>
-              <label className="block mb-1 text-sm font-medium">Name</label>
-              <input
-                type="text"
-                name="name"
-                placeholder="Enter patient name"
-                value={formData.name}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-500"
-                required
-                maxLength="50"
-              />
-            </div>
-            <div>
-              <label className="block mb-1 text-sm font-medium">Age</label>
-              <input
-                type="number"
-                name="age"
-                placeholder="Enter patient age"
-                value={formData.age}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-500"
-                required
-              />
-            </div>
-            <div>
-              <label className="block mb-1 text-sm font-medium">Gender</label>
-              <select
-                name="gender"
-                value={formData.gender}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-500"
-                required
-              >
-                <option value="">Select gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-            <div>
-              <label className="block mb-1 text-sm font-medium">
-                Phone Number
-              </label>
-              <input
-                type="text"
-                name="phoneNumber"
-                placeholder="Enter patient phone number"
-                value={formData.phoneNumber}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-500"
-                required
-              />
-            </div>
-            <div>
-              <label className="block mb-1 text-sm font-medium">Email</label>
-              <input
-                type="email"
-                name="email"
-                placeholder="Enter patient email"
-                value={formData.email}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-500"
-                required
-              />
-            </div>
-            <button
-              type="submit"
-              className="px-4 py-2 mt-4 text-white bg-blue-500 rounded-md hover:bg-blue-600"
-            >
-              {editingId ? "Update Patient" : "Add Patient"}
-            </button>
+      <button
+        className="px-4 py-2 mb-6 text-sm font-medium text-white bg-green-700 rounded-lg sm:text-base hover:bg-blue-600"
+        onClick={() => {
+          setFormData({
+            name: "",
+            age: "",
+            gender: "",
+            phoneNumber: "",
+            email: "",
+          });
+          setEditingId(null);
+          setShowPopup(true);
+        }}
+      >
+        Add New Patient
+      </button>
+
+      {showPopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+          <div className="w-full max-w-xs p-6 bg-white rounded-lg shadow-lg sm:max-w-md">
+            <h2 className="mb-4 text-lg font-semibold sm:text-xl">
+              {editingId ? "Edit Patient" : "Add New Patient"}
+            </h2>
+            <form onSubmit={handleSubmit}>
+              <div className="space-y-4">
+                <div>
+                  <label className="block mb-1 text-sm font-medium">Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 text-sm border rounded-md sm:text-base focus:ring focus:ring-blue-500"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block mb-1 text-sm font-medium">Age</label>
+                  <input
+                    type="number"
+                    name="age"
+                    value={formData.age}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 text-sm border rounded-md sm:text-base focus:ring focus:ring-blue-500"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block mb-1 text-sm font-medium">
+                    Gender
+                  </label>
+                  <select
+                    name="gender"
+                    value={formData.gender}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 text-sm border rounded-md sm:text-base focus:ring focus:ring-blue-500"
+                    required
+                  >
+                    <option value="">Select gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block mb-1 text-sm font-medium">
+                    Phone Number
+                  </label>
+                  <input
+                    type="text"
+                    name="phoneNumber"
+                    value={formData.phoneNumber}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 text-sm border rounded-md sm:text-base focus:ring focus:ring-blue-500"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block mb-1 text-sm font-medium">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 text-sm border rounded-md sm:text-base focus:ring focus:ring-blue-500"
+                    required
+                  />
+                </div>
+                <div className="flex justify-end space-x-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowPopup(false)}
+                    className="px-4 py-2 text-sm text-gray-700 bg-gray-200 rounded-lg sm:text-base hover:bg-gray-300"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 text-sm text-white bg-blue-500 rounded-lg sm:text-base hover:bg-blue-600"
+                  >
+                    {editingId ? "Update Patient" : "Add Patient"}
+                  </button>
+                </div>
+              </div>
+            </form>
           </div>
-        </form>
-      </div>
+        </div>
+      )}
 
       {/* Patients List */}
       <div className="mb-6">
