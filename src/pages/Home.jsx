@@ -2,28 +2,21 @@ import React, { useState, useEffect, useMemo } from "react";
 import {
   FaUserMd,
   FaUsers,
+  FaHeartbeat,
+  FaStethoscope, // For Doctor
+  FaClinicMedical, // For Nurse
+  FaProcedures, // For Patient
+  FaHandshake, // For BPJS Patient
+  FaUserShield, // For Employee
+  FaCog, // For Operator
   FaBoxes,
   FaAmbulance,
   FaFileAlt,
   FaCalendarCheck,
   FaHospitalAlt,
-  FaHeartbeat,
 } from "react-icons/fa";
-import { Link } from "react-router-dom";
 import Switch from "react-switch"; // Import react-switch for the toggle
-
-const Card = ({ title, value, color, icon: Icon, link }) => (
-  <Link
-    to={link}
-    className={`flex items-center justify-between p-6 text-white ${color} rounded-lg shadow-lg`}
-  >
-    <div>
-      <h2 className="text-xl">{title}</h2>
-      <p className="text-sm">{value}</p>
-    </div>
-    <Icon className="text-4xl" />
-  </Link>
-);
+import CompactModeCard from "../components/CompactModeCard";
 
 const Home = () => {
   // State to track compact mode
@@ -34,20 +27,127 @@ const Home = () => {
   const totalDoctors = 20;
   const totalNurses = 50;
   const totalMedicines = 200;
+  const totalBPJSPatients = 30;
+  const totalEmployees = 100;
+  const totalOperators = 15;
 
   // Use useMemo to memoize values that are not changing frequently
   const stats = useMemo(
     () => [
-      { title: "Total Patients", value: totalPatients, color: "bg-blue-100" },
-      { title: "Total Doctors", value: totalDoctors, color: "bg-green-100" },
-      { title: "Total Nurses", value: totalNurses, color: "bg-purple-100" },
+      {
+        title: "Total Patients",
+        value: totalPatients,
+        color: "bg-blue-100",
+        icon: FaHeartbeat,
+      },
+      {
+        title: "Total Doctors",
+        value: totalDoctors,
+        color: "bg-green-100",
+        icon: FaUserMd,
+      },
+      {
+        title: "Total Nurses",
+        value: totalNurses,
+        color: "bg-purple-100",
+        icon: FaClinicMedical,
+      },
+      {
+        title: "Total BPJS Patients",
+        value: totalBPJSPatients,
+        color: "bg-teal-100",
+        icon: FaHandshake,
+      },
+      {
+        title: "Total Employees",
+        value: totalEmployees,
+        color: "bg-orange-100",
+        icon: FaUserShield,
+      },
+      {
+        title: "Total Operators",
+        value: totalOperators,
+        color: "bg-red-100",
+        icon: FaCog,
+      },
       {
         title: "Total Medicines",
         value: totalMedicines,
         color: "bg-yellow-100",
+        icon: FaBoxes,
       },
     ],
-    [totalPatients, totalDoctors, totalNurses, totalMedicines]
+    [
+      totalPatients,
+      totalDoctors,
+      totalNurses,
+      totalBPJSPatients,
+      totalEmployees,
+      totalOperators,
+      totalMedicines,
+    ]
+  );
+
+  const cardData = useMemo(
+    () => [
+      {
+        title: "Doctors",
+        value: "View and manage doctors",
+        color: "bg-green-700",
+        icon: FaUserMd,
+        link: "/doctor",
+      },
+      {
+        title: "Nurses",
+        value: "View and manage nurses",
+        color: "bg-blue-700",
+        icon: FaUsers,
+        link: "/nurse",
+      },
+      {
+        title: "Patients",
+        value: "View and manage patients",
+        color: "bg-pink-700",
+        icon: FaHeartbeat,
+        link: "/patients",
+      },
+      {
+        title: "Appointments",
+        value: "Schedule and manage appointments",
+        color: "bg-orange-600",
+        icon: FaCalendarCheck,
+        link: "/appointment",
+      },
+      {
+        title: "Admissions",
+        value: "Manage patient admissions",
+        color: "bg-indigo-700",
+        icon: FaHospitalAlt,
+        link: "/admission",
+      },
+      {
+        title: "Inventory",
+        value: "View and manage medicines",
+        color: "bg-purple-700",
+        icon: FaBoxes,
+        link: "/inventory",
+      },
+      {
+        title: "Emergency Services",
+        value: "View emergency services",
+        color: "bg-red-700",
+        icon: FaAmbulance,
+        link: "/emergency",
+      },
+      {
+        title: "Reports",
+        value: "View system reports",
+        color: "bg-teal-700",
+        icon: FaFileAlt,
+        link: "/report",
+      },
+    ],
+    []
   );
 
   useEffect(() => {
@@ -93,74 +193,31 @@ const Home = () => {
           {stats.map((stat, index) => (
             <div
               key={index}
-              className={`p-6 ${stat.color} rounded-lg shadow-lg`}
+              className={`p-6 ${stat.color} rounded-lg shadow-lg flex items-center`}
             >
-              <h2 className="text-xl">{stat.title}</h2>
-              <p className="text-2xl font-bold">{stat.value}</p>
+              <stat.icon className="mr-4 text-4xl" />
+              <div>
+                <h2 className="text-xl">{stat.title}</h2>
+                <p className="text-2xl font-bold">{stat.value}</p>
+              </div>
             </div>
           ))}
         </div>
       )}
 
-      {/* New Compact Mode Cards */}
+      {/* Compact Mode Cards */}
       {isCompactMode && (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          <Card
-            title="Doctors"
-            value="View and manage doctors"
-            color="bg-green-700"
-            icon={FaUserMd}
-            link="/doctor"
-          />
-          <Card
-            title="Nurses"
-            value="View and manage nurses"
-            color="bg-blue-700"
-            icon={FaUsers}
-            link="/nurse"
-          />
-          <Card
-            title="Patients"
-            value="View and manage patients"
-            color="bg-pink-700"
-            icon={FaHeartbeat}
-            link="/patients"
-          />
-          <Card
-            title="Appointments"
-            value="Schedule and manage appointments"
-            color="bg-orange-600"
-            icon={FaCalendarCheck}
-            link="/appointment"
-          />
-          <Card
-            title="Admissions"
-            value="Manage patient admissions"
-            color="bg-indigo-700"
-            icon={FaHospitalAlt}
-            link="/admission"
-          />
-          <Card
-            title="Inventory"
-            value="View and manage medicines"
-            color="bg-purple-700"
-            icon={FaBoxes}
-            link="/inventory"
-          />
-          <Card
-            title="Emergency Services"
-            value="View emergency services"
-            color="bg-red-700"
-            icon={FaAmbulance}
-            link="/emergency"
-          />
-          <Card
-            title="Reports"
-            value="View system reports"
-            color="bg-teal-700"
-            icon={FaFileAlt}
-            link="/report"
-          />
+          {cardData.map((card, index) => (
+            <CompactModeCard
+              key={index}
+              title={card.title}
+              value={card.value}
+              color={card.color}
+              icon={card.icon}
+              link={card.link}
+            />
+          ))}
         </div>
       )}
     </div>

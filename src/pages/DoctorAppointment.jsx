@@ -44,7 +44,7 @@ const DoctorAppointment = () => {
   const [editingId, setEditingId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("All");
-  const [displayMode, setDisplayMode] = useState("list"); // State to control display mode
+  const [displayMode, setDisplayMode] = useState("table"); // State to control display mode
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [hoveredDate, setHoveredDate] = useState(null); // State to store hovered date for hover details
 

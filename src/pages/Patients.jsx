@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FaTrash, FaEdit } from "react-icons/fa";
 import BackButton from "../components/BackButton";
+import { Link } from "react-router-dom";
 
 export default function Patients() {
   // State for patients and form data
@@ -20,6 +21,14 @@ export default function Patients() {
       gender: "Female",
       phoneNumber: "987-654-3210",
       email: "jane.smith@example.com",
+    },
+    {
+      id: 3,
+      name: "Bob Johnson",
+      age: 40,
+      gender: "Male",
+      phoneNumber: "123-456-7890",
+      email: "bob.johnson@example.com",
     },
   ]);
 
@@ -185,7 +194,15 @@ export default function Patients() {
             <tbody>
               {patients.map((patient) => (
                 <tr key={patient.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-2 border-b">{patient.name}</td>
+                  <td className="px-4 py-2 border-b">
+                    {" "}
+                    <Link
+                      to={`/patients/detail/${patient.id}`}
+                      className="text-blue-500 hover:text-blue-600"
+                    >
+                      {patient.name}
+                    </Link>
+                  </td>
                   <td className="px-4 py-2 border-b">{patient.age}</td>
                   <td className="px-4 py-2 border-b">{patient.gender}</td>
                   <td className="px-4 py-2 border-b">{patient.phoneNumber}</td>
