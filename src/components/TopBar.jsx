@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FaUserCircle } from "react-icons/fa"; // User icon from react-icons
 import logo from "../assets/hospitallogo.png";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const TopBar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -36,11 +36,13 @@ const TopBar = () => {
     <div className="flex items-center justify-between p-4 text-black bg-white shadow-md">
       {/* Logo Section */}
       <div className="flex items-center space-x-2">
-        <img
-          src={logo}
-          alt="Hotel Management Logo"
-          className="object-contain w-12 h-12" // Adjust size for better mobile responsiveness
-        />
+        <Link to={"/"}>
+          <img
+            src={logo}
+            alt="Hotel Management Logo"
+            className="object-contain w-12 h-12" // Adjust size for better mobile responsiveness
+          />
+        </Link>
         <span className="text-xl font-bold">PT Klinik Sehat Bahagia</span>
       </div>
 
