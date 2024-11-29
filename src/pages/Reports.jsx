@@ -110,7 +110,7 @@ const Reports = () => {
     (totalReports || 1);
 
   return (
-    <div className="p-4 sm:p-6">
+    <div className="p-4 mb-16 sm:p-6">
       <BackButton />
       <h1 className="mb-4 text-2xl font-bold text-center">Reports</h1>
 

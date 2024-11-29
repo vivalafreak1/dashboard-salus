@@ -32,6 +32,31 @@ const Emergency = () => {
       doctor: "Dr. Brown",
     },
   ]);
+
+  const [ambulances, setAmbulances] = useState([
+    {
+      id: 1,
+      name: "Ambulance 101",
+      available: true,
+      phone: "+1-800-111-2222",
+      patient: "",
+    },
+    {
+      id: 2,
+      name: "Ambulance 102",
+      available: false,
+      phone: "+1-800-222-3333",
+      patient: "",
+    },
+    {
+      id: 3,
+      name: "Ambulance 103",
+      available: true,
+      phone: "+1-800-333-4444",
+      patient: "",
+    },
+  ]);
+
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedStatus, setSelectedStatus] = useState("All");
   const [selectedPriority, setSelectedPriority] = useState("All");
@@ -49,6 +74,28 @@ const Emergency = () => {
     High: "bg-red-500",
     Medium: "bg-yellow-500",
     Low: "bg-green-500",
+  };
+
+  const handleCall = (phone) => {
+    // Handle calling the ambulance
+    alert(`Calling ambulance at: ${phone}`);
+  };
+
+  const handleEditStatus = (id) => {
+    const updatedAmbulances = ambulances.map((ambulance) =>
+      ambulance.id === id
+        ? { ...ambulance, available: !ambulance.available }
+        : ambulance
+    );
+    setAmbulances(updatedAmbulances);
+  };
+
+  const handleAssignPatient = (id) => {
+    const patientName = prompt("Enter patient name:");
+    const updatedAmbulances = ambulances.map((ambulance) =>
+      ambulance.id === id ? { ...ambulance, patient: patientName } : ambulance
+    );
+    setAmbulances(updatedAmbulances);
   };
 
   return (
@@ -78,6 +125,60 @@ const Emergency = () => {
             <span className="font-bold text-gray-800">+1-800-345-6789</span>
           </li>
         </ul>
+      </div>
+
+      {/* Ambulance List */}
+      <div className="p-6 bg-white rounded-lg shadow-lg">
+        <h2 className="mb-4 text-2xl font-semibold">Available Ambulances</h2>
+        <table className="min-w-full table-auto">
+          <thead className="bg-gray-200">
+            <tr>
+              <th className="px-4 py-2 text-left border">Ambulance Name</th>
+              <th className="px-4 py-2 text-left border">Phone</th>
+              <th className="px-4 py-2 text-left border">Status</th>
+              <th className="px-4 py-2 text-left border">Patient</th>
+              <th className="px-4 py-2 text-left border">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {ambulances.map((ambulance) => (
+              <tr key={ambulance.id} className="hover:bg-gray-100">
+                <td className="px-4 py-2 border">{ambulance.name}</td>
+                <td className="px-4 py-2 border">{ambulance.phone}</td>
+                <td className="px-4 py-2 border">
+                  <span
+                    className={`px-3 py-1 text-white rounded-md ${
+                      ambulance.available ? "bg-green-500" : "bg-red-500"
+                    }`}
+                  >
+                    {ambulance.available ? "Available" : "Unavailable"}
+                  </span>
+                </td>
+                <td className="px-4 py-2 border">{ambulance.patient}</td>
+                <td className="px-4 py-2 border">
+                  <button
+                    onClick={() => handleCall(ambulance.phone)}
+                    className="px-4 py-2 text-white bg-blue-500 rounded-md"
+                  >
+                    <FaPhone className="mr-2" />
+                  </button>
+                  <button
+                    onClick={() => handleEditStatus(ambulance.id)}
+                    className="px-4 py-2 ml-2 text-white bg-yellow-500 rounded-md"
+                  >
+                    Edit Status
+                  </button>
+                  <button
+                    onClick={() => handleAssignPatient(ambulance.id)}
+                    className="px-4 py-2 ml-2 text-white bg-green-500 rounded-md"
+                  >
+                    Assign Patient
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       {/* Active Emergency Cases */}
@@ -134,13 +235,10 @@ const Emergency = () => {
           <table className="min-w-full table-auto">
             <thead className="bg-gray-200">
               <tr>
-                <th className="px-4 py-2 text-left border">Patient Name</th>
-                <th className="px-4 py-2 text-left border">
-                  Type of Emergency
-                </th>
+                <th className="px-4 py-2 text-left border">Patient</th>
+                <th className="px-4 py-2 text-left border">Emergency Type</th>
                 <th className="px-4 py-2 text-left border">Status</th>
-                <th className="px-4 py-2 text-left border">Arrival Time</th>
-                <th className="px-4 py-2 text-left border">Priority Level</th>
+                <th className="px-4 py-2 text-left border">Priority</th>
                 <th className="px-4 py-2 text-left border">Assigned Doctor</th>
               </tr>
             </thead>
@@ -149,54 +247,22 @@ const Emergency = () => {
                 <tr key={caseItem.id} className="hover:bg-gray-100">
                   <td className="px-4 py-2 border">{caseItem.name}</td>
                   <td className="px-4 py-2 border">{caseItem.type}</td>
-                  <td className="px-4 py-2 border">{caseItem.status}</td>
-                  <td className="px-4 py-2 border">{caseItem.arrivalTime}</td>
-                  <td
-                    className={`px-4 py-2 border ${
-                      priorityColors[caseItem.priority]
-                    }`}
-                  >
-                    {caseItem.priority}
+                  <td className="px-4 py-2 border">
+                    <span
+                      className={`px-3 py-1 text-white rounded-md ${
+                        priorityColors[caseItem.priority]
+                      }`}
+                    >
+                      {caseItem.status}
+                    </span>
                   </td>
+                  <td className="px-4 py-2 border">{caseItem.priority}</td>
                   <td className="px-4 py-2 border">{caseItem.doctor}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-      </div>
-
-      {/* Emergency Room Availability */}
-      <div className="p-6 bg-white rounded-lg shadow-lg">
-        <h2 className="mb-4 text-2xl font-semibold">
-          Emergency Room Availability
-        </h2>
-        <ul className="space-y-6">
-          <li className="flex items-center text-lg">
-            <FaUsers className="mr-4 text-xl text-green-500" />
-            Room 1: <span className="font-bold text-green-600">Available</span>
-          </li>
-          <li className="flex items-center text-lg">
-            <FaUsers className="mr-4 text-xl text-red-500" />
-            Room 2: <span className="font-bold text-red-600">Occupied</span>
-          </li>
-          <li className="flex items-center text-lg">
-            <FaUsers className="mr-4 text-xl text-green-500" />
-            Room 3: <span className="font-bold text-green-600">Available</span>
-          </li>
-        </ul>
-      </div>
-
-      {/* Quick Access */}
-      <div className="flex flex-wrap justify-center gap-6">
-        <button className="flex items-center w-full px-6 py-3 text-white transition-all duration-300 bg-red-600 rounded-lg shadow-md hover:bg-red-700 sm:w-auto">
-          <FaAmbulance className="mr-3 text-xl" />
-          Request Ambulance
-        </button>
-        <button className="flex items-center w-full px-6 py-3 text-white transition-all duration-300 bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 sm:w-auto">
-          <FaUsers className="mr-3 text-xl" />
-          Call Emergency Team
-        </button>
       </div>
     </div>
   );
