@@ -11,7 +11,7 @@ import {
 } from "react-icons/fa";
 
 export default function PatientDetail() {
-  const { patientId } = useParams(); // Get the patientId from the route parameter
+  const { patientId } = useParams();
 
   // Dummy patient data for now
   const initialPatient = {
@@ -67,13 +67,18 @@ export default function PatientDetail() {
     ],
   };
 
-  const [patient, setPatient] = useState(initialPatient);
+  const [patient] = useState(initialPatient);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
 
+  // Sort medical history by date in descending order
+  const sortedMedicalHistory = [...patient.medicalHistory].sort(
+    (a, b) => new Date(b.date) - new Date(a.date)
+  );
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentHistory = patient.medicalHistory.slice(
+  const currentHistory = sortedMedicalHistory.slice(
     indexOfFirstItem,
     indexOfLastItem
   );
@@ -145,8 +150,8 @@ export default function PatientDetail() {
                   onClick={() => handlePageChange(index + 1)}
                   className={`px-4 py-2 border rounded-md ${
                     currentPage === index + 1
-                      ? "bg-blue-600 text-white"
-                      : "bg-white text-black hover:bg-blue-200"
+                      ? "bg-green-700 text-white"
+                      : "bg-white text-black hover:bg-green-200"
                   } text-sm`}
                 >
                   {index + 1}
